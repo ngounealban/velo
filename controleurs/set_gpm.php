@@ -9,7 +9,7 @@ extract($_POST);
 if($first!=$second and $first!=$third and $third!=$second and $first!="choisir" and $second!="choisir" and  $third!="choisir")
 {
 	inser_gpm($_GET['id'],$first,$second,$third);
-	update_point($_GET['id']);
+	update_point_extra($_GET['id']);
 	update_championat(get_id_championat($_GET['id']));
 	echo "operation reussi!!";
 }
