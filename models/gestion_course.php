@@ -374,7 +374,7 @@ function inser_sp($id,$first,$second,$third)
     $req -> execute( array($id,"sp",$top) );
 }
 
-function update_point($id)
+function update_point_extra($id)
 {
     $top =explode(":",top_extra($id)) ;
     add_point($top[0],$id,15);
@@ -387,9 +387,118 @@ function top_extra($id)
   global $bdd;
         $req = $bdd -> query("
             SELECT  *
-            from gmp_sp
+            from gpm_sp
             order by id desc 
             ");
         $result = $req -> fetch();
         return $result["top_3"];  
+}
+
+
+function add_point($joueur,$id,$point)
+{
+    
+    $point1 = $point + get_points($joueur,$id)['points'];
+    global $bdd;
+    $req = $bdd -> prepare("
+    update info_course 
+    set points = ? 
+    where (id_course = ? and id_coureur = ? );
+    ") ;
+    $req -> execute( array($point1,$id,$joueur) );
+
+
+}
+
+function get_points($joueur,$id)
+{
+    global $bdd;
+        $req = $bdd -> prepare("
+            SELECT  *
+            from info_course
+            WHERE (id_course = ? and id_coureur=?)
+            ");
+        $req -> execute(array($id,$joueur))
+        or die(print_r($bdd->errorInfo()));
+        $result = $req -> fetch();
+        return $result;
+
+}
+function get_gmp_course($id)
+{
+    global $bdd;
+        $req = $bdd -> prepare("
+            SELECT  *
+            from gpm_sp
+            WHERE (id_course = ? and type=?)
+            ");
+        $req -> execute(array($id,"gmp"))
+        or die(print_r($bdd->errorInfo()));
+        $result = $req -> fetchAll();
+        return $result;
+}
+function get_sp_course($id)
+{
+    global $bdd;
+        $req = $bdd -> prepare("
+            SELECT  *
+            from gpm_sp
+            WHERE (id_course = ? and type=? )
+            ");
+        $req -> execute(array($id,"sp"))
+        or die(print_r($bdd->errorInfo()));
+        $result = $req -> fetchAll();
+        return $result;
+}
+
+function nom_prenom($id)
+{
+    global $bdd;
+        $req = $bdd -> prepare("
+            SELECT  *
+            from coureur
+            WHERE (id_coureur = ?)
+            ");
+        $req -> execute(array($id))
+        or die(print_r($bdd->errorInfo()));
+        $result = $req -> fetch();
+        return $result["nom_coureur"]." ".$result["prenom_coureur"];
+
+}
+
+function retirer($id,$top3)// top3 is the id of the gmp_sp
+{
+    $top =explode(":",top_extra($top3)) ;
+    rm_point($top[0],$id,15);
+    rm_point($top[1],$id,10);
+    rm_point($top[2],$id,5);
+    delete_extra($top3);
+}
+
+function delete_extra($id)
+{
+     global $bdd;
+        $req = $bdd -> prepare("
+            delete from gpm_sp
+            where id = ?;
+            ") ;
+        $req -> execute( array($id) )
+        or die(print_r($bdd->errorInfo()));
+        return 1;
+}
+
+
+function rm_point($joueur,$id,$point)
+{
+    
+    $point1 = get_points($joueur,$id)['points'] - $point;
+    global $bdd;
+    $req = $bdd -> prepare("
+    update info_course 
+    set points = ? 
+    where (id_course = ? and id_coureur = ? );
+    ") ;
+    $req -> execute( array($point1,$id,$joueur) );
+
+
 }
