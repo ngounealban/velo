@@ -142,10 +142,131 @@ $id_championat = course($_GET['id'])['id_championat'];
         ?>
         </tbody>
     </table>
+
+    
     <!-- Modal -->
     <?php
     include_once "addChampcompenent.php" ;
     ?>
+</div>
+
+<div class="container">
+    <br><hr>
+
+    <?php
+        $all_gmp = get_gmp_course($_GET['id']);
+    if(count($all_gmp)>0){
+
+    ?>
+
+    <table class="table table-responsive table-striped table-hover">
+        <thead>
+            <caption>Liste des GPM</caption>
+            <tr class="white" style="background-color: #0066ff ;">
+                <th>#</th>
+                <th>PREMIER </th>
+                <th>DEUXIEME</th>
+                <th>TROISIEME</th>
+                <th>MODIFIER</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+            $k = 0;
+        foreach ($all_gmp as $gmp) {
+        $k++;
+        $top3 = explode(":", $gmp["top_3"]);
+        include "modifier_gpm.php";
+        ?>
+                <tr>
+                    <td>
+                        <?=$k?>
+                    </td>
+                    <td>
+                        <?= nom_prenom($top3[0])?>
+                    </td>
+                    <td>
+                        <?= nom_prenom($top3[1])?>
+                    </td>
+                    <td>
+                        <?= nom_prenom($top3[2])?>
+                    </td>
+                    <td >
+                        <button type="button" 
+
+                        class="bg-marina-hover" data-toggle="modal" data-target="#update_gpm<?=$gmp['id']?>">
+                                Modifier
+                            </button>
+                    </td>
+
+
+                </tr>
+        <?php
+        }
+        ?>
+        </tbody>
+    </table>
+<?php }?>
+</div>
+
+<div class="container">
+    <br><hr>
+
+    <?php
+        $all_sp = get_sp_course($_GET['id']);
+        //var_dump($all_sp);
+    if(count($all_sp)>0){
+    ?>
+
+    <table class="table table-responsive table-striped table-hover">
+        <thead>
+            <caption>Liste des SP</caption>
+            <tr class="white" style="background-color: #0066ff ;">
+                <th>#</th>
+                <th>PREMIER </th>
+                <th>DEUXIEME</th>
+                <th>TROISIEME</th>
+                <th>MODIFIER</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+            $k = 0;
+        foreach ($all_sp as $sp) {
+        $k++;
+        //echo $sp["top_3"];
+        $top33 = explode(":", $sp["top_3"]);
+        include "modifier_sp.php";
+        ?>
+                <tr>
+                    <td>
+                        <?=$k?>
+                    </td>
+                    <td>
+                        <?= nom_prenom($top33[0]) ?>
+                    </td>
+                    <td>
+                        <?= nom_prenom($top33[1])?>
+                    </td>
+                    <td>
+                        <?= nom_prenom($top33[2])?>
+                    </td>
+                    <td >
+                        <button type="button" 
+                         
+                        class="bg-marina-hover" data-toggle="modal" data-target="#update_sp<?=$sp['id']?>">
+                                 Modifier 
+                            </button>
+                    </td>
+
+
+                </tr>
+        <?php
+        }
+        ?>
+        </tbody>
+    </table>
+<?php }?>
 </div>
 <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>

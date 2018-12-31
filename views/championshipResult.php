@@ -68,7 +68,7 @@ include_once "../models/gestion_championat.php";
             <h5>Classement : </h5>
         </label>
         <select name="resultoption" id="cls">
-           <option value="1"  disable>Point</option>
+           <option value="0"  disable>Point</option>
             <option value="1"  selected>Temps &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </option>
         </select>
 

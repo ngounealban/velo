@@ -7,7 +7,8 @@
                 <h4 class="modal-title"></h4>
             </div>
             <?php
-                $time = get_time_course1($coureur['id_coureur'],$_GET['id']);
+                $time1 = get_time_course1($coureur['id_coureur'],$_GET['id']);
+                $time = ($time1) ? explode(":", "00:00:00:000") : $time1 ;
                 $heures = $time[0];
                 $minutes = $time[1];
                 $secondes = $time[2];
